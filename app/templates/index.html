@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<!-- React Packages -->
+<script
+    src="{{ url_for('static', filename='js/packages/babel.min.js') }}" crossorigin></script>
+<script
+    src="{{ url_for('static', filename='js/packages/react.js') }}" crossorigin></script>
+<script 
+    src="{{ url_for('static', filename='js/packages/react_dom.js') }}" crossorigin></script>
+
+<!-- SOS -->
+<!-- EOS -->
+
+
+<!-- Application React Components -->
+
+<script 
+    type="text/babel"
+    data-plugins="transform-modules-umd"
+    data-type="module"
+    data-presets="react"
+    src="{{ url_for('static', filename='js/functions.js') }}"></script>
+
+
+<script 
+    type="text/babel"
+    data-plugins="transform-modules-umd"
+    data-type="module"
+    data-presets="react"
+    src="{{ url_for('static', filename='js/App.js') }}"></script>
+
+
+<script 
+    type="text/babel"
+    data-plugins="transform-modules-umd"
+    data-type="module"
+    data-presets="react"
+    src="{{ url_for('static', filename='js/index.js') }}"></script>
+
+<!-- Static and style files -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+
+
+</head>
+<body>
+    <div id="root"></div>
+</body>
+</html>

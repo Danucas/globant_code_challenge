@@ -1,0 +1,85 @@
+
+:root {
+    --primary: rgb(77, 23, 172);
+    --primary-shadow: rgb(20, 0, 55);
+}
+
+body {
+    background-color: var(--primary-shadow);
+    font-family: sans-serif;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+
+button {
+    cursor: pointer;
+    padding: 4px 12px;
+    border: none;
+    background-color: var(--primary);
+    border-radius: 4px;
+}
+
+button:hover {
+    background-color: white;
+    color: var(--primary);
+}
+
+img {
+    width: 20vw;
+    height: 20vw;
+    margin-left: calc(50% - 10vw);
+    margin-top: 20vh;
+    box-sizing: border-box;
+}
+
+h1 {
+    box-sizing: border-box;
+    font-size: 14px;
+    width: 90vw;
+    margin: 12px calc(5vw - 6px);
+    padding: 0;
+    text-align: center;
+    color: white;
+    font-weight: normal;
+}
+
+p {
+    box-sizing: border-box;
+    font-size: 14px;
+    width: 90vw;
+    margin: 12px calc(5vw - 6px);
+    padding: 0;
+    text-align: center;
+    color: white;
+    font-weight: normal;
+}
+
+.container {
+    justify-content: center;
+    align-items: center;
+}
+
+.function {
+    border-radius: 6px;
+    padding: 6px 8px;
+    width: fit-content;
+    font-weight: normal;
+}
+
+
+.functions-container {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    padding-bottom: 12px;
+    justify-items: center;
+    align-items: center;
+}
+
+.functions-container h1 {
+    width: fit-content;
+    padding: 4px 24px;
+    color: var(--primary);
+}
