@@ -25,6 +25,7 @@ jobs:
           pytest
   
   integration-test:
+    needs: unittest
     name: DB Integration tests
     runs-on: ubuntu-latest
 
@@ -42,6 +43,7 @@ jobs:
         run: |
           python3 -m app.integration_tests.db_test
   deploy:
+    needs: integration-test
     name: deploy development version
     runs-on: ubuntu-latest
 
