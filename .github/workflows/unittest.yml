@@ -67,9 +67,13 @@ jobs:
         run: |
           ssh ${{ secrets.USERNAME }}@${{ secrets.HOST_IP }} "cd ${{ secrets.TARGET_DIR }} && docker build -t globant-code-challenge ."
       
-      - name: clean docker
+      - name: stop container
         run: |
-          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST_IP }} "cd ${{ secrets.TARGET_DIR }} || docker container stop codechallengeapi || docker container remove codechallengeapi"
+          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST_IP }} "if ! $(docker container stop codechallengeapi); then echo 'Failed to stop container'; fi"
+      
+      - name: remove container
+        run: |
+          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST_IP }} "if ! $(docker container remove codechallengeapi); then echo 'Failed to stop container'; fi"
       
       # Start 
       - name: run the container
