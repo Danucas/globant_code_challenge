@@ -81,7 +81,7 @@ def post_jobs():
           in: formData
           type: file
           schema:
-            $ref: '#/definitions/job'
+            $ref: '#/definitions/Job'
 
     responses:
         '200':
