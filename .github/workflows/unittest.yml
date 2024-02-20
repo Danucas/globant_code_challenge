@@ -69,7 +69,7 @@ jobs:
       
       - name: clean docker
         run: |
-          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST_IP }} "cd ${{ secrets.TARGET_DIR }} && docker container remove code-challenge-api"
+          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST_IP }} "cd ${{ secrets.TARGET_DIR }} && docker container stop code-challenge-api && docker container remove code-challenge-api"
       
       # Start 
       - name: run the container
