@@ -48,13 +48,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: cleanup
+        run: |
+          rm -rf ~/.ssh
+
       - name: install ssh key
         run: |
           install -m 600 -D /dev/null ~/.ssh/id_rsa
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.HOST_IP }} > ~/.ssh/known-hosts
+          ssh-keyscan -H ${{ secrets.HOST_IP }} > ~/.ssh/known_hosts
 
       - name: connect and pull
         run: |
           ssh ${{ secrets.USERNAME }}@${{ secrets.HOST_IP }} "cd ${{ secrets.TARGET_DIR }} && git pull"
+
+      # use it when server is not running
+      - name: build app
+        run: |
+          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST_IP }} "cd ${{ secrets.TARGET_DIR }} && docker build -t globant-code-challenge ."
+        
+      # Start 
+      - name: run the container
+        run: |
+          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST_IP }} "cd ${{ secrets.TARGET_DIR }} && docker run -p 4000:4000 --name code-challenge-api globant-code-challenge"
   
