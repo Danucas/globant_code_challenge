@@ -41,4 +41,18 @@ jobs:
       - name: Start API Server
         run: |
           python3 -m app.integration_tests.db_test
+  deploy:
+    name: deploy development version
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: install ssh key
+        run: |
+          install -m 600 -D /dev/null ~/.ssh/id_rsa
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsaa
+          ssh-keyscan -H ${{ secrets.HOST_IP }} > ~/.ssh/known-hosts
+
+      - name: connect and pull
+        run: |
+          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST_IP }} "cd ${{ secrets.TARGET_DIR }} && git checkout develop && git pull"
   
