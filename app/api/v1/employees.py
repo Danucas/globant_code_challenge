@@ -1,5 +1,5 @@
 from api.v1 import api_blueprint
-from app.api.utils import Utils
+from api.api_utils import Utils
 from flask import jsonify, current_app, request, send_file, after_this_request
 from api.models import EmployeesByQuarters
 import uuid
@@ -7,12 +7,72 @@ import uuid
 
 @api_blueprint.route("/hired_employees", methods=["GET"])
 def get_hired_employees():
+    """Returns a list of hired employees
+    ---
+    definitions:
+      hired_employee:
+        type: object
+        properties:
+            id:
+                type: string
+            name:
+                type: string
+            datetime:
+                type: string
+                description: ISO format string
+            department_id:
+                type: integer
+                description: Foreign Key for departments
+            job_id:
+                type: integer
+                description: Foreign Key for jobs
+    responses:
+      200:
+        description: A list of departments
+        schema:
+          $ref: '#/definitions/hired_employee'
+        examples:
+          department: [
+                {"id": 1, "department": "Test Department"}
+          ]
+    """
     hired_employees = current_app.config["ENGINE"].all("hired_employees")
     return jsonify(hired_employees)
 
 
 @api_blueprint.route("/hired_employees", methods=["POST"])
 def post_hired_employees():
+    """
+    Insert Hired Employees in Bulk operation
+    ---
+    definitions:
+      hired_employee:
+        type: object
+        properties:
+            id:
+                type: string
+            name:
+                type: string
+            datetime:
+                type: string
+                description: ISO format string
+            department_id:
+                type: integer
+                description: Foreign Key for departments
+            job_id:
+                type: integer
+                description: Foreign Key for jobs
+
+    parameters:
+        - name: file
+          required: false
+          in: formData
+          type: file
+
+    responses:
+        200
+
+    """
     errors = Utils.bulk_upload("hired_employees")
     return jsonify(errors=errors)
 

@@ -1,5 +1,5 @@
 from api.v1 import api_blueprint
-from app.api.utils import bulk_upload
+from api.api_utils import Utils
 from flask import jsonify, current_app
 
 
@@ -11,5 +11,5 @@ def get_jobs():
 
 @api_blueprint.route("/jobs", methods=["POST"])
 def post_jobs():
-    errors = bulk_upload("jobs")
+    errors = Utils.bulk_upload("jobs")
     return jsonify(errors=errors)

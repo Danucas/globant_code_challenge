@@ -1,5 +1,5 @@
 import pytest
-from ..api.utils import Utils
+from ..api.api_utils import Utils
 from ..api.db_engine import ENTITY_MAP
 import os
 import logging

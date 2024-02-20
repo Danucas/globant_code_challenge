@@ -1,5 +1,5 @@
 from api.v1 import api_blueprint
-from app.api.utils import Utils
+from api.api_utils import Utils
 from flask import jsonify, current_app, request, send_file, after_this_request
 from api.models import MostHiringDepartments
 import uuid
@@ -7,6 +7,25 @@ import uuid
 
 @api_blueprint.route("/departments", methods=["GET"])
 def get_departments():
+    """Returns a list of departments
+    ---
+    definitions:
+      department:
+        type: object
+        properties:
+          id:
+            type: string
+
+    responses:
+      200:
+        description: A list of departments
+        schema:
+          $ref: '#/definitions/department'
+        examples:
+          department: [
+                {"id": 1, "department": "Test Department"}
+          ]
+    """
     departments = current_app.config["ENGINE"].all("departments")
     return jsonify(departments)
 

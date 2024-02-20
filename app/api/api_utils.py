@@ -4,8 +4,6 @@ import traceback
 import os
 
 
-
-
 class Utils:
     request = request
     app = current_app

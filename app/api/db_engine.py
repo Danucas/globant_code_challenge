@@ -17,8 +17,8 @@ ENTITY_MAP = {
 class Engine:
     base = Base()
 
-    def __init__(self):
-        self.engine = create_engine("sqlite:///globant_code_challenge.db", echo=True)
+    def __init__(self, conn="sqlite:///", db="globant_code_challenge.db"):
+        self.engine = create_engine(f"{conn}{db}", echo=True)
         self.base.metadata.create_all(bind=self.engine)
 
     def query(self, query):

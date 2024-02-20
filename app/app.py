@@ -1,6 +1,7 @@
 from desktop_wrapper import BaseApp
 from api.v1 import api_blueprint
 from api.db_engine import Engine
+from flasgger import Swagger
 
 app: BaseApp = BaseApp(
     '',
@@ -8,6 +9,8 @@ app: BaseApp = BaseApp(
     static_folder='./assets',
     template_folder='./templates'
 )
+
+Swagger(app)
 
 app.register_blueprint(api_blueprint)
 
