@@ -1,9 +1,8 @@
 from api.v1 import api_blueprint
-from api.v1.utils import bulk_upload, save_as_csv
-from flask import jsonify, current_app, request, send_file
+from app.api.utils import Utils
+from flask import jsonify, current_app, request, send_file, after_this_request
 from api.models import EmployeesByQuarters
 import uuid
-import csv
 
 
 @api_blueprint.route("/hired_employees", methods=["GET"])
@@ -14,7 +13,7 @@ def get_hired_employees():
 
 @api_blueprint.route("/hired_employees", methods=["POST"])
 def post_hired_employees():
-    errors = bulk_upload("hired_employees")
+    errors = Utils.bulk_upload("hired_employees")
     return jsonify(errors=errors)
 
 
@@ -44,7 +43,13 @@ def get_hired_employees_by_quarter():
 
     if request.args.get("format") == "csv":
         filename = f"{uuid.uuid4().hex}.csv"
-        save_as_csv(filename, response)
-        return send_file(filename)
+        file_path = Utils.save_as_csv(filename, response)
+
+        @after_this_request
+        def remove_file(response):
+            Utils.delete_tmp(file_path)
+            return response
+
+        return send_file(file_path)
 
     return jsonify(data=response)

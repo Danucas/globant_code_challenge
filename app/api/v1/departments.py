@@ -1,9 +1,8 @@
 from api.v1 import api_blueprint
-from api.v1.utils import bulk_upload, save_as_csv
-from flask import jsonify, current_app, request, send_file
+from app.api.utils import Utils
+from flask import jsonify, current_app, request, send_file, after_this_request
 from api.models import MostHiringDepartments
 import uuid
-
 
 
 @api_blueprint.route("/departments", methods=["GET"])
@@ -14,7 +13,7 @@ def get_departments():
 
 @api_blueprint.route("/departments", methods=["POST"])
 def post_departments():
-    errors = bulk_upload("departments")
+    errors = Utils.bulk_upload("departments")
     return jsonify(errors=errors)
 
 
@@ -54,8 +53,13 @@ def get_most_hiring_departments():
 
     if request.args.get("format") == "csv":
         filename = f"{uuid.uuid4().hex}.csv"
-        save_as_csv(filename, response)
-        return send_file(filename)
+        file_path = Utils.save_as_csv(filename, response)
+
+        @after_this_request
+        def remove_file(response):
+            Utils.delete_tmp(file_path)
+            return response
+
+        return send_file(file_path)
     
     return jsonify(departments=response)
-    

@@ -1,5 +1,5 @@
 from api.v1 import api_blueprint
-from api.v1.utils import bulk_upload
+from app.api.utils import bulk_upload
 from flask import jsonify, current_app
 
 

@@ -1,2 +1,3 @@
 desktop-wrapper
 SQLAlchemy==2.0.27
+pytest==8.0.1
