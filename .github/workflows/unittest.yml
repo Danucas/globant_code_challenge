@@ -13,6 +13,7 @@ jobs:
     steps:
       - name: build API image
         run: |
+          pwd &&
           docker build -t globant-code-challenge ../../
 
       - name: run API Container
