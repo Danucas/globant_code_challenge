@@ -1,0 +1,2 @@
+desktop-wrapper
+SQLAlchemy==2.0.27
