@@ -73,7 +73,20 @@ jobs:
 
       
       # Start 
-      - name: run the container
+      - name: run the API container
         run: |
           ssh ${{ secrets.USERNAME }}@${{ secrets.HOST_IP }} "docker run -p 4000:4000 -d --name codechallengeapi --network host globant-code-challenge"
+      
+
+      - name: remove NGINX container
+        run: |
+          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST_IP }} "docker rm -f nginx-container"
+
+      - name: Build NGINX Container
+        run: |
+          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST_IP }} "cd ${{ secrets.TARGET_DIR }}/nginx && docker build -t nginx:custom ."
+
+      - name: Run NGINX Container
+        run: |
+          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST_IP }} "docker run --name nginx-container -d --network host nginx:custom"
   
