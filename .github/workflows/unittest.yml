@@ -65,7 +65,7 @@ jobs:
 
       - name: clean docker
         run: |
-          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST_IP }} "docker stop $(docker ps -a -q) && docker system prune -af"
+          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST_IP }} "if [ -f docker stop $(docker ps -a -q) ]; then echo 'failed' fi && docker system prune -af"
 
       # use it when server is not running
       - name: build app
