@@ -69,7 +69,7 @@ jobs:
       
       - name: stop container
         run: |
-          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST_IP }} "if (( docker rm -f codechallengeapi )); then echo 'Failed to stop container'; fi"
+          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST_IP }} "if [ -f $(docker rm -f codechallengeapi) ]; then echo 'Failed to stop container'; fi"
 
       
       # Start 
