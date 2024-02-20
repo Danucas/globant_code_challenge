@@ -1,32 +1,54 @@
 # globant_code_challenge
 
+## REST API for HR Calculations
 
-## REST API
+### Requirements
 
-Application Setup
+- Python 3.8 or higher
+- Docker
 
-this app was built with the help of [desktop-wrapper](https://pypi.org/project/desktop-wrapper/)
+### Application Stack
 
-## Build the image
+- Flask (Backend)
+- SQLAlchemy (DB Engine)
+- SQLite (DB) can be extended to other SQL DBs
+
+
+### Application Setup
+
+This app was built on top of [desktop-wrapper](https://pypi.org/project/desktop-wrapper/)
+
+
+### Build Project
+
+Create the image with a custom tag
 
 ```
 $ docker build -t globant-code-challenge .
 ```
 
-## Run the container
+### Run Docker
+
+Create and run the container using the new custom Image, and route the 4000 default port from the container to the host
 
 ```
 $ docker run -p 4000:4000 --name code-challenge-api globant-code-challenge
 ```
 
+### Check the API specs
 
-## Run unittest
+Go to [Swagger API Specs](http://localhost:4000/apidocs)
+
+
+### Run unittest
+
+At the root of the repo run
 
 ```
 $ pytest
 ```
 
-## Run integration tests
+### Run integration tests
 
 ```
 $ python -m app.integration_tests.db_test

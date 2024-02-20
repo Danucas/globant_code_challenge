@@ -56,28 +56,28 @@ def test_bulk_upload_departments():
     Utils.request = MockRequest("departments")
     Utils.app = MockApp()
 
-    errors = Utils.bulk_upload("departments")
+    status = Utils.bulk_upload("departments")
 
-    assert len(errors) == 0
+    assert len(status.get("errors")) == 0
 
-    errors = Utils.bulk_upload("hired_employees")
+    status = Utils.bulk_upload("hired_employees")
 
     assert not os.path.exists("imported/test_file_departments.csv")
-    assert len(errors) == 1500
+    assert len(status.get("errors")) == 1500
 
 
 def test_bulk_upload_hired_employees():
     Utils.request = MockRequest("hired_employees")
     Utils.app = MockApp()
 
-    errors = Utils.bulk_upload("hired_employees")
+    status = Utils.bulk_upload("hired_employees")
 
-    assert len(errors) == 0
+    assert len(status.get("errors")) == 0
 
-    errors = Utils.bulk_upload("departments")
+    status = Utils.bulk_upload("departments")
 
     assert not os.path.exists("imported/test_file_hired_employees.csv")
-    assert len(errors) == 1500
+    assert len(status.get("errors")) == 1500
 
 
 def test_save_as_csv():

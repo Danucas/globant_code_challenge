@@ -21,6 +21,8 @@ class Utils:
         headers = cls.request.headers
 
         errors = []
+        duplicates = []
+        row_count = 0
 
         if "multipart/form-data" in headers.get("Content-Type"):
             print(cls.request.files.keys())
@@ -40,12 +42,23 @@ class Utils:
                     for row in csv_content:
                         try:
                             cls.app.config["ENGINE"].insert(entity_type, row)
+                            row_count += 1
                         except Exception as e:
                             print(e)
                             print(traceback.format_exc())
-                            errors.append(f"Error: {e}, data: {row}")
+                            if "UNIQUE constraint failed" in str(e):
+                                duplicates.append(row[0])
+                            else:
+                                errors.append(f"Error: {e}, data: {row}")
+
                 os.remove(file_path)
-        return errors
+        status = {
+            "rows_writen": row_count,
+            "errors": errors,
+            "duplicates": len(duplicates),
+            "duplicates_description": "/".join(duplicates)
+        }
+        return status
 
     @classmethod
     def save_as_csv(cls, filename, data):

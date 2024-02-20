@@ -9,35 +9,140 @@ import uuid
 def get_departments():
     """Returns a list of departments
     ---
+    produces:
+      - application/json
+      - text/csv
+
+    parameters:
+      - in: query
+        name: format
+        type: string
+
     definitions:
       department:
         type: object
         properties:
           id:
+            type: integer
+          department:
             type: string
+      ListOfDepartments:
+        type: object
+        properties:
+          departments:
+            type: array
+            items:
+              $ref: '#/definitions/department'
 
     responses:
       200:
         description: A list of departments
-        schema:
-          $ref: '#/definitions/department'
-        examples:
-          department: [
-                {"id": 1, "department": "Test Department"}
-          ]
+        content:
+          text/csv:
+            schema:
+              type: string
+
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/ListOfDepartments'
+            
     """
     departments = current_app.config["ENGINE"].all("departments")
+    if request.args.get("format") == "csv":
+        filename = f"{uuid.uuid4().hex}.csv"
+        file_path = Utils.save_as_csv(filename, departments.get("departments"))
+
+        @after_this_request
+        def remove_file(response):
+            Utils.delete_tmp(file_path)
+            return response
+
+        return send_file(file_path)
     return jsonify(departments)
 
 
 @api_blueprint.route("/departments", methods=["POST"])
 def post_departments():
-    errors = Utils.bulk_upload("departments")
-    return jsonify(errors=errors)
+    """
+    Insert Departments from CSV file in Bulk Operation
+    ---
+
+    definitions:
+      status:
+        type: object
+        properties:
+          rows_writen:
+            type: integer
+          errors:
+            type: array
+            items:
+              type: string
+              description: Error Description, aling with the data that failed
+          duplicates:
+            type: array
+            items:
+              type: integer
+          duplicates_description:
+            type: string
+
+
+    parameters:
+        - name: file
+          required: false
+          in: formData
+          type: file
+          schema:
+            $ref: '#/definitions/department'
+
+    responses:
+        '200':
+            schema:
+                $ref: '#/definitions/status'
+            description: Status from process
+
+    """
+    status = Utils.bulk_upload("departments")
+    return jsonify(status=status)
 
 
 @api_blueprint.route("/departments/most_hiring")
 def get_most_hiring_departments():
+    """
+    Calculate Most Hiring departments comparing mean average from 2021
+    ---
+    produces:
+      - application/json
+      - text/csv
+    
+    parameters:
+      - in: query
+        name: format
+        type: string
+
+    definitions:
+      MostHiringDepartments:
+        type: object
+        properties:
+          id:
+            type: integer
+          department:
+            type: string
+          hired:
+            type: integer
+    
+      ListOfMostHiringDepartments:
+        type: array
+        items:
+          $ref: '#/definitions/MostHiringDepartments'
+    
+    responses:
+      200:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/ListOfMostHiringDepartments'
+    """
     query = """
     WITH average AS (
         SELECT AVG(hired_co) AS mean
@@ -80,5 +185,5 @@ def get_most_hiring_departments():
             return response
 
         return send_file(file_path)
-    
+
     return jsonify(departments=response)
