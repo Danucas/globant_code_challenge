@@ -69,10 +69,10 @@ jobs:
       
       - name: clean docker
         run: |
-          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST_IP }} "cd ${{ secrets.TARGET_DIR }} && docker container stop code-challenge-api && docker container remove code-challenge-api"
+          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST_IP }} "cd ${{ secrets.TARGET_DIR }} && docker container stop codechallengeapi && docker container remove codechallengeapi"
       
       # Start 
       - name: run the container
         run: |
-          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST_IP }} "cd ${{ secrets.TARGET_DIR }} && docker run -p 80:4000 -d --name code-challenge-api globant-code-challenge"
+          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST_IP }} "cd ${{ secrets.TARGET_DIR }} && docker run -p 4000:4000 -d --name codechallengeapi globant-code-challenge"
   
