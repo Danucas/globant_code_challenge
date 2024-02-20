@@ -69,14 +69,11 @@ jobs:
       
       - name: stop container
         run: |
-          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST_IP }} "if ! $(docker container stop codechallengeapi); then echo 'Failed to stop container'; fi"
-      
-      - name: remove container
-        run: |
-          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST_IP }} "if ! $(docker container remove codechallengeapi); then echo 'Failed to stop container'; fi"
+          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST_IP }} "if (( docker rm -f codechallengeapi )); then echo 'Failed to stop container'; fi"
+
       
       # Start 
       - name: run the container
         run: |
-          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST_IP }} "cd ${{ secrets.TARGET_DIR }} && docker run -p 4000:4000 -d --name codechallengeapi --network host globant-code-challenge"
+          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST_IP }} "docker run -p 4000:4000 -d --name codechallengeapi --network host globant-code-challenge"
   
