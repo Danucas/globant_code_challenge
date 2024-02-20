@@ -1,0 +1,24 @@
+name: Unit Testing
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Unit testing REST API
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: build API image
+        run: |
+          docker build -t globant-code-challenge .
+
+      - name: run API Container
+        run: |
+          docker run -p 4000:4000 -d --name api-container globant-code-challenge
+
+      - name: stop API Container
+        run: |
+          docker container stop api-container
