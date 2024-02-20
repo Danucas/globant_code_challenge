@@ -13,8 +13,7 @@ jobs:
     steps:
       - name: build API image
         run: |
-          echo $(ls)
-          docker build -t globant-code-challenge Dockerfile
+          docker build -t globant-code-challenge -f ../Dockerfile ../.
 
       - name: run API Container
         run: |
